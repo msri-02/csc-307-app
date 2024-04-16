@@ -50,6 +50,8 @@ const findUserByNameAndJob = (name, job) => {
 };
 
 const addUser = (user) => {
+    const id = Math.floor(Math.random() * 1000);;
+    user.id = id;
     users["users_list"].push(user);
     return user;
   };
@@ -99,7 +101,8 @@ app.listen(port, () => {
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
   addUser(userToAdd);
-  res.send();
+  res.status(201).send("Successfully added user");
+  //res.send();
 });
 
 app.delete("/users/:id", (req, res) => {
