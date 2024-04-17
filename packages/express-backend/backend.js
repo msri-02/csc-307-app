@@ -6,31 +6,31 @@ const app = express();
 const port = 8000;
 const users = {
   users_list: [
-    {
-      id: "xyz789",
-      name: "Charlie",
-      job: "Janitor"
-    },
-    {
-      id: "abc123",
-      name: "Mac",
-      job: "Bouncer"
-    },
-    {
-      id: "ppp222",
-      name: "Mac",
-      job: "Professor"
-    },
-    {
-      id: "yat999",
-      name: "Dee",
-      job: "Aspring actress"
-    },
-    {
-      id: "zap555",
-      name: "Dennis",
-      job: "Bartender"
-    }
+    //{
+    //   id: "xyz789",
+    //   name: "Charlie",
+    //   job: "Janitor"
+    // },
+    // {
+    //   id: "abc123",
+    //   name: "Mac",
+    //   job: "Bouncer"
+    // },
+    // {
+    //   id: "ppp222",
+    //   name: "Mac",
+    //   job: "Professor"
+    // },
+    // {
+    //   id: "yat999",
+    //   name: "Dee",
+    //   job: "Aspring actress"
+    // },
+    // {
+    //   id: "zap555",
+    //   name: "Dennis",
+    //   job: "Bartender"
+    // }
   ]
 };
 
@@ -49,8 +49,24 @@ const findUserByNameAndJob = (name, job) => {
   );
 };
 
+//some of the function was adapted from stack overflow
+function randomID(length)
+{
+  let id = "";
+  const num = Math.floor(Math.random() * 1000);
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  const len = chars.length;
+  let counter = 0;
+    while (counter < length) {
+      id += chars.charAt(Math.floor(Math.random() * len));
+      counter += 1;
+    }
+  id = id + num;
+  return id;
+}
+
 const addUser = (user) => {
-    const id = Math.floor(Math.random() * 1000);;
+    const id = randomID(3);
     user.id = id;
     users["users_list"].push(user);
     return user;
