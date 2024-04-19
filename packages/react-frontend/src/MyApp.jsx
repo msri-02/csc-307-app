@@ -1,27 +1,84 @@
 // src/MyApp.jsx
-import React, { useState } from "react";
+import React, {useState, useEffect} from 'react';
 import Table from "./Table";
 import Form from "./Form";
 
+
 function MyApp() {
-  const [characters, setCharacters] = useState([
-    {
-      name: "Charlie",
-      job: "Janitor" // the rest of the data
-    }
-  ]);
+  const [characters, setCharacters] = useState([]);
 
-  function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index;
+  useEffect(() => {
+    fetchUsers()
+      .then((res) => res.json())
+      .then((json) => setCharacters(json["users_list"]))
+      .catch((error) => { console.log(error); });
+  }, [] );
+
+  function deleteUser(id) {
+    const promise = fetch("http://localhost:8000/users/:" + id, {
+      method: "DELETE",
     });
-    setCharacters(updated);
+    return promise;
+  }
+ 
+  function removeOneCharacter(index) {
+    deleteUser(characters[index].id)
+      .then((res) => {
+        if(res.status == 204){
+          const updated = characters.filter((character, i) => {
+            return i !== index;
+          });
+          setCharacters(updated);
+        }
+        else if(res.status == 404){
+
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      }) 
   }
 
-  function updateList(person) {
-    setCharacters([...characters, person]);
-  }
+  function postUser(person) {
+    const promise = fetch("http://localhost:8000/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(person),
+    });
 
+    return promise;
+  }
+  
+function updateList(person) { 
+    postUser(person)
+      .then((res) => {
+        if(res.status == 201) {
+          return res.json();
+          //setCharacters([...characters, person]);
+        }
+        else {
+          console.log("Error posting user status code:", res.status);
+        }
+
+      })
+      .then((json_obj) => {
+        setCharacters([...characters, json_obj]);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+}
+
+
+  function fetchUsers() {
+    const promise = fetch("http://localhost:8000/users");
+    return promise;
+}
+
+
+ 
   return (
     <div className="container">
       <Table
