@@ -118,11 +118,10 @@ app.post("/users", (req, res) => {
   const userToAdd = req.body;
   addUser(userToAdd);
   res.status(201).send(userToAdd);
-  //res.send();
 });
 
 app.delete("/users/:id", (req, res) => {
   const id = req.params["id"]; //or req.params.id
   deleteUserById(id);
-  res.send();
+  res.status(204).send("User successfully deleted");
 });
