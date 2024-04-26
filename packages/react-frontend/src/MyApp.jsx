@@ -14,15 +14,15 @@ function MyApp() {
       .catch((error) => { console.log(error); });
   }, [] );
 
-  function deleteUser(id) {
-    const promise = fetch("http://localhost:8000/users/:" + id, {
+  function deleteUser(_id) {
+    const promise = fetch("http://localhost:8000/users/" + _id, {
       method: "DELETE",
     });
     return promise;
   }
  
   function removeOneCharacter(index) {
-    deleteUser(characters[index].id)
+    deleteUser(characters[index]._id)
       .then((res) => {
         if(res.status == 204){
           const updated = characters.filter((character, i) => {
@@ -56,7 +56,6 @@ function updateList(person) {
       .then((res) => {
         if(res.status == 201) {
           return res.json();
-          //setCharacters([...characters, person]);
         }
         else {
           console.log("Error posting user status code:", res.status);
